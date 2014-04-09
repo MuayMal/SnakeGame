@@ -16,12 +16,13 @@ namespace SnakeGame
     /// </summary>
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        Vector2 pellet = new Vector2(0, 0);
+        Vector2 velocity = new Vector2(0, -1);
+        Vector2 pellet = new Vector2(20,15);
         List<Vector2> Snake = new List<Vector2>();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Random rand = new Random();
-        Texture2D SnakeTexture;
+        Texture2D SnakeTexture, PelletTexture;
         
         public Game1()
         {
@@ -51,10 +52,11 @@ namespace SnakeGame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
 
-
+            Snake.Add(new Vector2(40, 24));
+            
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            SnakeTexture = Content.Load<Texture2D>(@"SNAKE");
-
+            SnakeTexture = Content.Load<Texture2D>(@"Snake");
+            PelletTexture = Content.Load<Texture2D>(@"pellet");
 
             // TODO: use this.Content to load your game content here
         }
@@ -76,15 +78,38 @@ namespace SnakeGame
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
+
+            Snake[0] += velocity;
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
 
             KeyboardState kb = Keyboard.GetState();
+
             if (kb.IsKeyDown(Keys.Up))
             {
-
+                velocity = new Vector2(0, -1);
             }
+
+            if (kb.IsKeyDown(Keys.Down))
+            {
+                velocity = new Vector2(0, 1);
+            }
+
+            if (kb.IsKeyDown(Keys.Left))
+            {
+                velocity = new Vector2(-1, 0);
+            }
+
+            if (kb.IsKeyDown(Keys.Right))
+            {
+                velocity = new Vector2(1, 0);
+            }
+
+            if (Snake[0] == pellet)
+            {
+                
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -106,9 +131,12 @@ namespace SnakeGame
              for (int i = 0; i < Snake.Count; i++) 
             {
              
-                spriteBatch.Draw(SnakeTexture, Snake[i] * 10, Color.White);
+                spriteBatch.Draw(SnakeTexture, Snake[i] * 10, Color.Black);
+                 spriteBatch.Draw(PelletTexture, pellet * 10, Color.White);
 
             }
+
+            
             spriteBatch.End();
 
             
