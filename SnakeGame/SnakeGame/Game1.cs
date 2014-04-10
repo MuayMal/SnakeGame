@@ -110,8 +110,8 @@ namespace SnakeGame
             if (Snake[0] == pellet)
             {
                 
+            }
             // TODO: Add your update logic here
-
             base.Update(gameTime);
         }
 
