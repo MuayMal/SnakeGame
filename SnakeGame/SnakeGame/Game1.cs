@@ -91,6 +91,18 @@ namespace SnakeGame
 
             if (snakeMovementTimer > snakeMovementTime)
             {
+                for (int i = Snake.Count - 1; i > 0; i--)
+                {
+                    Snake[i] = Snake[i - 1];
+
+                    if (Snake[0] == Snake[i])
+                    {
+                        break;
+                    }
+
+                }
+
+
                 Snake[0] += velocity;
                 snakeMovementTimer = 0f;
             }
@@ -127,6 +139,18 @@ namespace SnakeGame
                 Snake.Add(new Vector2(Snake[0].X, Snake[0].Y));
 
             }
+
+            for (int i = Snake.Count - 1; i > 0; i--)
+            {
+
+
+                if (Snake[0] == Snake[i])
+                {
+                    break;
+                }
+            }
+
+            
             // TODO: Add your update logic here
             base.Update(gameTime);
         }
