@@ -17,12 +17,15 @@ namespace SnakeGame
     public class Game1 : Microsoft.Xna.Framework.Game
     {
         Vector2 velocity = new Vector2(0, -1);
-        Vector2 pellet = new Vector2(20,15);
+        Vector2 pellet;
         List<Vector2> Snake = new List<Vector2>();
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Random rand = new Random();
         Texture2D SnakeTexture, PelletTexture;
+
+        float snakeMovementTimer = 0f;
+        float snakeMovementTime = 50f;
         
         public Game1()
         {
@@ -41,6 +44,8 @@ namespace SnakeGame
         {
             // TODO: Add your initialization logic here
 
+            pellet = new Vector2(rand.Next(2, 70), rand.Next(2, 40));
+
             base.Initialize();
         }
 
@@ -51,6 +56,9 @@ namespace SnakeGame
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
+
+           
 
             Snake.Add(new Vector2(40, 24));
             
@@ -79,7 +87,13 @@ namespace SnakeGame
         {
             // Allows the game to exit
 
-            Snake[0] += velocity;
+            snakeMovementTimer += (float)gameTime.ElapsedGameTime.Milliseconds;
+
+            if (snakeMovementTimer > snakeMovementTime)
+            {
+                Snake[0] += velocity;
+                snakeMovementTimer = 0f;
+            }
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -109,7 +123,9 @@ namespace SnakeGame
 
             if (Snake[0] == pellet)
             {
-                
+                pellet = new Vector2(rand.Next(2, 70), rand.Next(2, 40));
+                Snake.Add(new Vector2(Snake[0].X, Snake[0].Y));
+
             }
             // TODO: Add your update logic here
             base.Update(gameTime);
