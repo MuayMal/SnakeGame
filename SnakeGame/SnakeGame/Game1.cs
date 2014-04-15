@@ -26,11 +26,13 @@ namespace SnakeGame
 
         float snakeMovementTimer = 0f;
         float snakeMovementTime = 50f;
+         
         
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            this.Window.Title = "Score: 1";
         }
 
        
@@ -95,16 +97,30 @@ namespace SnakeGame
                 {
                     Snake[i] = Snake[i - 1];
 
-                    if (Snake[0] == Snake[i])
-                    {
-                        break;
-                    }
+                    
 
                 }
 
 
                 Snake[0] += velocity;
                 snakeMovementTimer = 0f;
+
+                for (int i = 1; i < Snake.Count; i++)
+                {
+                    if (Snake[0] == Snake[i])
+                    {
+                        int score = 0;
+                        score = Snake.Count;
+                        this.Window.Title = "Score: " + score;
+
+                        Snake.Clear();
+                        Snake.Add(new Vector2(40, 24));
+
+                        score = 1;
+                        this.Window.Title = "Score: " + score;
+                        break;
+                    }
+                }
             }
 
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
@@ -113,46 +129,41 @@ namespace SnakeGame
 
             KeyboardState kb = Keyboard.GetState();
 
-            if (kb.IsKeyDown(Keys.Up))
+            if (kb.IsKeyDown(Keys.Up) && velocity.Y != 1)
             {
                 velocity = new Vector2(0, -1);
             }
 
-            if (kb.IsKeyDown(Keys.Down))
+            if (kb.IsKeyDown(Keys.Down) && velocity.Y != -1)
             {
                 velocity = new Vector2(0, 1);
             }
 
-            if (kb.IsKeyDown(Keys.Left))
+            if (kb.IsKeyDown(Keys.Left) && velocity.X != 1)
             {
                 velocity = new Vector2(-1, 0);
             }
 
-            if (kb.IsKeyDown(Keys.Right))
+            if (kb.IsKeyDown(Keys.Right) && velocity.X != -1)
             {
                 velocity = new Vector2(1, 0);
             }
 
+          
             if (Snake[0] == pellet)
             {
                 pellet = new Vector2(rand.Next(2, 70), rand.Next(2, 40));
-                Snake.Add(new Vector2(Snake[0].X, Snake[0].Y));
+                Snake.Add(Snake[0]);
 
+                
             }
 
-            for (int i = Snake.Count - 1; i > 0; i--)
-            {
 
-
-                if (Snake[0] == Snake[i])
-                {
-                    break;
-                }
-            }
-
-            
             // TODO: Add your update logic here
             base.Update(gameTime);
+
+
+
         }
 
         /// <summary>
@@ -161,7 +172,7 @@ namespace SnakeGame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Turquoise);
 
             // TODO: Add your drawing code here
                 
